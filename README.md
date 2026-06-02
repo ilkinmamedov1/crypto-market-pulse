@@ -67,3 +67,54 @@ Use .env.example for public configuration examples.
 ## License
 
 MIT License.
+
+
+
+
+
+cd ~/Desktop/crypto-market-pulse-fresh
+
+cat >> README.md <<'EOF'
+
+## First Run Notes
+
+On the first run, the project starts with an empty PostgreSQL database.
+
+The realtime ticker tables usually populate within 1-2 minutes:
+
+- market_ticker_latest
+- market_ticker_history
+
+The historical daily OHLCV sync can take longer because it backfills daily Binance candles for many symbols:
+
+- daily_klines
+
+During the first historical backfill, some dashboards may show partial data until the sync progresses.
+
+You can monitor progress with:
+
+docker logs -f crypto_daily_sync
+docker logs -f crypto_realtime_ingestor
+
+You can also check row counts with:
+
+PGPASSWORD=12345 psql -h localhost -p 5432 -U crypto_user -d crypto_market -c "SELECT COUNT(*) FROM daily_klines;"
+PGPASSWORD=12345 psql -h localhost -p 5432 -U crypto_user -d crypto_market -c "SELECT COUNT(*) FROM market_ticker_history;"
+EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
